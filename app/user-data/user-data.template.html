@@ -1,0 +1,19 @@
+<div>
+<p>
+Username: {{$ctrl.userId}}
+</p>
+
+<ul>
+	<span>Last {{$ctrl.noSessions}} sessions:<span>
+	<li ng-repeat="session in $ctrl.sessions">
+		<span>Started: {{session.start | date :'dd/MM/yyyy h:mm:ss'}}</span>
+		<span>Ended: {{session.end | date :'dd/MM/yyyy h:mm:ss'}}</span>
+		<span>Duration: {{session.duration | toTimeString}}</span>
+	</li>
+
+</ul>
+
+Average session duration:
+
+
+</div>

@@ -1,0 +1,17 @@
+<div>
+	<select ng-model="$ctrl.selection" ng-change="$ctrl.selectionChanged()">
+		<option value="all" ng-cli>All</option>
+		<option value="active">Active</option>
+		<option value="inactive">Inactive</option>
+	</select>
+
+	<ul class="users">
+		<li ng-repeat="user in $ctrl.users">
+			<a href="#!/users/{{user.Username}}">
+			<span>{{user.Username}}</span>
+			<span>Timestamp: {{user.Timestamp | date:'dd/MM/yyyy h:mm:ss'}}</span>
+			<span>Status: {{user.active?'active':'inactive'}}</span>
+			</a>
+		</li>
+	</ul>
+</div>
