@@ -9,6 +9,7 @@
   <title>Proiect intro</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
   <link rel="stylesheet" href="lib/html5-boilerplate/dist/css/normalize.css">
   <link rel="stylesheet" href="lib/html5-boilerplate/dist/css/main.css">
   <link rel="stylesheet" href="app.css">
@@ -21,17 +22,20 @@
 </head>
 <body>
 
-  <ul>
-	  <li><a href="#!">Home</a></li>
-	  <li><a href="#!/users">Users</a></li>
-  </ul>
-
-  <div 	ng-view></div>
+ <nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">Menu</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li><a href="#!">Home</a></li>
+      <li><a href="#!/users">Users</a></li>
+    </ul>
+  </div>
+</nav>
+ <div ng-view></div>
   
 
-  <!-- In production use:
-  <script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>
-  -->
   <script src="user-session/user-session.module.js"></script>
   <script src="user-session/user-session.component.js"></script>
   <script src="user-data/user-data.module.js"></script>
@@ -39,5 +43,7 @@
   <script src="user-data/timeString/timeString.filter.js"></script>
   <script src="users/users.module.js"></script>
   <script src="users/users.component.js"></script>
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 </body>
 </html>

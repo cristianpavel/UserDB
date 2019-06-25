@@ -29,22 +29,18 @@ var getLastNActionsSpecificUser = function getLastNActionsSpecificUser(user, N, 
 		body: {
 			query: {
 				match: {
-					Username: user
+					username: user
 				}
 			},
 			sort: [
 				{
-					Timestamp: {order: "desc"}
+					end: {order: "desc"}
 				}
 			],
 			size: N
 		}
 	}, callback);
 				
-
-
-
-
 
 }
 
@@ -55,23 +51,35 @@ var getAverageSessionDurationSpecificUser = function getAverageSessionDuratonSpe
 		index: 'sessions',
 		body: {
 			query: {
-				match: {
-					Username : user
+				bool : {
+					must: [
+					  {
+						match: {
+							username : user
+						
+						}
+					  },
+					  {	
+						match: {
+							valid: true
+						}
+					  }
+					]
+					
 				}
+				
 			},
 			aggs: {
-				status: {
-					temps: {
-						field: 'Timestamp',
-						order: { _key : 'desc' }
-					},
-					aggs: {
-							
-						
-
+				avg_duration: {
+					avg: {
+						script: "doc['end'].date.getMillis() - doc['start'].date.getMillis()"
 					
 					}
+				}
+				
 			}
+		}
+	}, callback);
 
 
 
@@ -93,7 +101,7 @@ var getUsers = function getUsers(res, active) {
 			aggs: {
 				username: {
 					terms: {
-						field: "Username"
+						field: "username"
 					},
 
 					aggs: {
@@ -101,13 +109,13 @@ var getUsers = function getUsers(res, active) {
 							top_hits : {
 								sort: [
 								  {
-									"Timestamp" : {
+									"end" : {
 										"order": "desc"
 									}
 								  }
 								],
 								_source: {
-									includes: [ "Username", "Timestamp", "active"]
+									includes: [ "username", "start", "end", "valid"]
 								},
 								size: 1
 							}
@@ -128,7 +136,7 @@ var getUsers = function getUsers(res, active) {
 		console.log(response.aggregations['username'].buckets[0]['top_username_hits'].hits.hits);
 		response.aggregations['username'].buckets.forEach(function(bucket) {
 			var user = bucket['top_username_hits'].hits.hits[0]._source;
-			if (user.active == active || active == ALL_USERS) {
+			if (user.valid != active || active == ALL_USERS) {
 				console.log(user);
 				users.push(user);
 			}
@@ -153,30 +161,64 @@ app.post("/connect", function(req, res) {
 	console.log(messageBody);
 	getLastNActionsSpecificUser(messageBody.username, 1, 
 		function(error, response, status) {
+			console.log(error);
 			if (response.hits.hits.length >= 0 &&
 				response.hits.hits[0] &&
-				response.hits.hits[0]._source.active == messageBody.active) {
+				response.hits.hits[0]._source.valid ^ messageBody.active) {
 				res.send({error: 'INVALID ACTION'});
 				console.log("ERR");
 				return;
 			}
 
+			if (!messageBody.active && (response.hits.hits.length == 0 ||
+				!response.hits.hits[0])) {
+				console.log(response.hits);
+				res.send({error: 'INVALID ACTION'});
+				console.log("ERR");
+				return;
 
-			client.index({
-				index: 'sessions',
-				type: 'default',
-				body: {
-					"Username"	: messageBody.username,
-					"Timestamp"	: new Date().getTime(),
-					"active"	: messageBody.active
-				}
-			},function(err, resp, status) {
-				if (err) {
-					res.send({error: 'ES error'});
-				}
-				res.send("OK");
-				console.log(resp);
-			});
+			}
+		
+			var id = undefined
+
+			if (!messageBody.active) {
+				var hit = response.hits.hits[0];
+				client.index({
+					index: 'sessions',
+					type: 'default',
+					id: hit._id,
+					body: {
+						"username"	: hit._source.username,
+						"start"		: hit._source.start,
+						"end"		: new Date().getTime(),
+						"valid"		: true
+					}
+				},function(err, resp, status) {
+					if (err) {
+						res.send({error: 'ES error'});
+					}
+					res.send("OK");
+					console.log(resp);
+				});
+			} else {
+				client.index({
+					index: 'sessions',
+					type: 'default',
+
+					body: {
+						"username"	: messageBody.username,
+						"start"		: new Date().getTime(),
+						"end"		: new Date().getTime(),
+						"valid"		: false
+					}
+				},function(err, resp, status) {
+					if (err) {
+						res.send({error: 'ES error'});
+					}
+					res.send("OK");
+					console.log(resp);
+				});
+			}
 			
 		
 		});
@@ -211,8 +253,9 @@ app.post("/getSessions", function(req, res) {
 	
 	var messageBody = req.body;
 	var sessions = [];
+	console.log("Get Sessions");
 	getLastNActionsSpecificUser(messageBody.username,
-				messageBody.noSessions * 2,
+				messageBody.noSessions,
 				function(err, response, status) {
 					if (err) {
 						return;
@@ -229,6 +272,23 @@ app.post("/getSessions", function(req, res) {
 
 });
 
+
+app.post("/getAverageDuration", function(req, res) {
+
+	var messageBody = req.body;
+	var average;
+	console.log("Get Average");
+	getAverageSessionDurationSpecificUser(messageBody.username,
+			function(err, response, status) {
+				console.log(err);
+				console.log(response.aggregations['avg_duration'].value);
+				res.send({
+					avg: response.aggregations['avg_duration'].value
+				});
+			});
+
+
+});
 
 
 app.listen(port, () => console.log(`App listening on port ${port}!`))

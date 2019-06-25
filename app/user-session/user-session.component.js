@@ -37,7 +37,6 @@ angular.
 					console.log(postData);
 					sendDataToServer(postData)
 						.then(function(response) {
-						console.log('aici');
 						if (response.data &&
 							response.data.error) {
 							alert(response.data.error);

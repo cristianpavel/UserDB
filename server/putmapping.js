@@ -5,13 +5,18 @@ client.indices.putMapping({
         type: 'default',
         body: {
                 properties: {
-                        Username: {
+                        username: {
                                 type : 'text',
                                 fielddata: 'true'
                         },
-                        Timestamp: {type : 'date' },
-                        active: {
-                                type: 'integer'
+			start: {
+				type: 'date'
+			},
+			end: {
+				type: 'date'
+			},
+                        valid: {
+                                type: 'boolean'
                         }
                 }
         }

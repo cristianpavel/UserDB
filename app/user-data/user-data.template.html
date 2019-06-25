@@ -3,17 +3,30 @@
 Username: {{$ctrl.userId}}
 </p>
 
-<ul>
-	<span>Last {{$ctrl.noSessions}} sessions:<span>
-	<li ng-repeat="session in $ctrl.sessions">
-		<span>Started: {{session.start | date :'dd/MM/yyyy h:mm:ss'}}</span>
-		<span>Ended: {{session.end | date :'dd/MM/yyyy h:mm:ss'}}</span>
-		<span>Duration: {{session.duration | toTimeString}}</span>
-	</li>
+<p>
+Average session duration: {{$ctrl.average | toTimeString}}.
+</p>
 
-</ul>
 
-Average session duration:
+	<table class="table table-striped">
+		<thead>
+		<tr>
+			<th>No</th>
+			<th>Start</th>
+			<th>End</th>
+			<th>Duration</th>
+		</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="session in $ctrl.sessions">
+				<td>{{$index}}</td>
+				<td>{{session.start | date :'dd/MM/yyyy h:mm:ss'}}</td>
+				<td>{{session.end | date :'dd/MM/yyyy h:mm:ss'}}</td>
+				<td>{{session.duration | toTimeString}}</td>
+			</tr>
+		</tbody>
+	  </table>
+
 
 
 </div>

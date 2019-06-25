@@ -5,13 +5,19 @@
 		<option value="inactive">Inactive</option>
 	</select>
 
-	<ul class="users">
-		<li ng-repeat="user in $ctrl.users">
-			<a href="#!/users/{{user.Username}}">
-			<span>{{user.Username}}</span>
-			<span>Timestamp: {{user.Timestamp | date:'dd/MM/yyyy h:mm:ss'}}</span>
-			<span>Status: {{user.active?'active':'inactive'}}</span>
-			</a>
-		</li>
-	</ul>
+	<table class="table table-striped">
+		<thead>
+		<tr>
+			<th>Username</th>
+			<th>Status</th>
+		</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="user in $ctrl.users">
+				<td><a href="#!/users/{{user.username}}">{{user.username}}</a></td>
+				<td>{{user.valid ? 'INACTIVE' : 'ACTIVE'}}</td>
+			</tr>
+		</tbody>
+	  </table>
+
 </div>

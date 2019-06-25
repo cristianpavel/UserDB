@@ -18,31 +18,41 @@ angular.
 				$http.post('/getSessions', postData).then(function(response) {
 					var i = 1;
 					self.sessions = [];
-					console.log(response.data);
-					if (response.data[0].active == 1) {
-						self.sessions.push({
-							start: response.data[0].Timestamp,
-							end: "N/A",
-							duration: "N/A"
-						});
-						i++;
-					}
+					for (i = 0; i < response.data.length; i ++) {
+						var start = response.data[i].start;
+						var session = {};
+						if (response.data[i].valid == 1) {
 
-					for (; i < response.data.length; i += 2) {
-						var start = response.data[i].Timestamp;
-						var end = response.data[i - 1].Timestamp;
-						self.sessions.push({
-							start: start,
-							end: end,
-							duration: end - start
-						});
+							var end = response.data[i].end;
+							session = {
+								start: start,
+								end: end,
+								duration: end - start
+							};
+						} else {
+							session = {
+								start: start,
+								end: 'N/A',
+								duration: 'N/A'
+							}
+						}
+						
+						self.sessions.push(session);
 
 						
 					}
 					console.log(self.sessions);
 
 				});
+				
+				$http.post('/getAverageDuration', postData).then(function(response) {
 
+					console.log(response.data);
+					self.average = response.data.avg;
+
+
+
+				});
 
 			}
 		]
