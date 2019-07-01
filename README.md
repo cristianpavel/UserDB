@@ -1,7 +1,6 @@
 # UserDB
 
 Author: Cristian Pavel
-Email: pcristian97@gmail.com
 
 Mini app that allows users to start and end sessions (to simulate
 an work environment). The sessions are stored in an Elastic Search 
