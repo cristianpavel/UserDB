@@ -1,8 +1,16 @@
 <div>
-<p>
-Enter username:
-<input type="text" placeholder="Username" ng-model="$ctrl.username"/>
-</p>
-<button name="startSesion" ng-click="$ctrl.startSession()">Start Session</button>
-<button name="endSession" ng-click="$ctrl.endSession()">End Session</button>
+<div class="form-group col-lg-4">
+	<label for="usr">Username:</label>
+	<input type="text" class="form-control input-sm" placeholder:"Username" ng-model="$ctrl.username">
+<button name="startSesion" ng-click="$ctrl.startSession()" class="btn btn-default" type="button">Start Session</button>
+<button name="endSession" ng-click="$ctrl.endSession()" class="btn btn-default" type="button">End Session</button>
+</div>
+
+
+<div ng-show="$ctrl.error != ''" id="error">
+	<span> {{$ctrl.error}} </span>
+</div>
+<div ng-show="$ctrl.msg != ''" id="msg">
+	<span> {{$ctrl.msg}} </span>
+</div>
 </div>

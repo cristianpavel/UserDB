@@ -1,5 +1,5 @@
 angular.
-	module('userData').
+	module('myApp').
 	filter('toTimeString', function() {
 		return function(millseconds) {
 

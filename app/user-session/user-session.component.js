@@ -4,16 +4,18 @@ angular.
 	module('userSession').
 	component('userSession', {
 		templateUrl: 'user-session/user-session.template.html',
-		controller: ['$http', 
-			function UserSessionController($http) {
+		controller: ['$http', '$timeout', 
+			function UserSessionController($http, $timeout) {
 
 				var self = this;
 				var badUsername = function badUsername() {
 					return !self.username;
 				}
+				self.error = "";
 
+				self.msg = "";
 				var sendDataToServer = function sendDataToServer(data) {
-					return $http.post("/connect", data)
+					return $http.post("/", data)
 						.catch(function(err) {
 							console.log(err);
 							return false;
@@ -21,7 +23,19 @@ angular.
 
 
 				}
+				var clear = function (toClear) {
 
+					
+					$timeout(function() {
+						if (toClear == 'error') {
+							self.error = '';
+							console.log(self.error);
+						} else 
+							self.msg = '';
+
+					}, 1000);
+
+				}
 				self.startSession = function startSession() {
 					if (badUsername()) {
 						console.log("Bad Username");
@@ -39,11 +53,14 @@ angular.
 						.then(function(response) {
 						if (response.data &&
 							response.data.error) {
-							alert(response.data.error);
+							self.error = self.username + " is already active. Press End first.";
+							clear('error');
 							return false;
 						}
-							
-						alert("Session started");
+						
+						self.msg = self.username + " has started his/her session.";
+
+						clear(self.msg);
 					});
 
 				}
@@ -65,11 +82,16 @@ angular.
 						.then(function(response) {
 						if (response.data &&
 							response.data.error) {
-							alert(response.data.error);
+							console.log("error");
+							self.error = self.username + " is not active. Press Start first.";
+							clear('error');
 							return false;
 						}
+
+						self.msg = self.username + " has ended his/her session.";
+
+						clear('msg');
 						
-						alert("Session ended");
 					});
 
 

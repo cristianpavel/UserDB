@@ -1,23 +1,65 @@
 <div>
-	<select ng-model="$ctrl.selection" ng-change="$ctrl.selectionChanged()">
-		<option value="all" ng-cli>All</option>
-		<option value="active">Active</option>
-		<option value="inactive">Inactive</option>
-	</select>
 
-	<table class="table table-striped">
-		<thead>
-		<tr>
-			<th>Username</th>
-			<th>Status</th>
+<div style="text-align: left">
+	<div dropdown-select="$ctrl.ddSelectOptions"
+		dropdown-model="$ctrl.ddSelectSelected"
+  		dropdown-item-label="text"
+		dropdown-onchange="$ctrl.onSelectionChanged(selected)" style="float: left">
+	</div>
+	<input type="text" placeholder="Search.." id="search_bar" ng-model="$ctrl.search" ng-keypress="$ctrl.searchUser($event)">
+</div>	
+
+<table class="table table-striped" ng-if="$ctrl.users">
+	<img src="../images/loading.gif" class="loading" ng-if="!$ctrl.users"/>
+	<thead>
+	<tr>
+		<th>Username</th>
+		<th>Status</th>
+	</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="user in $ctrl.users">
+			<td><a href="#!/users/{{user.username}}">{{user.username}}</a></td>
+			<td ng-class="{inactive: user.valid, active : !user.valid}">{{user.valid ? 'INACTIVE' : 'ACTIVE'}}</td>
 		</tr>
-		</thead>
-		<tbody>
-			<tr ng-repeat="user in $ctrl.users">
-				<td><a href="#!/users/{{user.username}}">{{user.username}}</a></td>
-				<td>{{user.valid ? 'INACTIVE' : 'ACTIVE'}}</td>
-			</tr>
-		</tbody>
-	  </table>
+	</tbody>
+</table>
+
+
+<nav style="text-align:right" >
+  <ul class="pagination justify-content-center">
+    <li class="page-item" ng-if="$ctrl.users">
+      <a class="page-link" aria-label="Next" ng-click="$ctrl.nextPage()">
+        <span aria-hidden="true">&raquo;</span>
+        <span class="sr-only">Next</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+
+<table class="table table-striped" ng-if="$ctrl.usersProductive">
+	<span> Most Productive</span>
+	<div class="input-group col-sm-1">
+ 		<input type="text" class="form-control" ng-model="$ctrl.noUsersProductive">
+		<span class="input-group-btn">
+			<button class="btn btn-default" type="button" ng-click="$ctrl.getProductiveUsers()">Users</button>
+  	</span>
+	</div>
+	<img src="../images/loading.gif" class="loading" ng-if="!$ctrl.usersProductive"/>
+	<thead>
+	<tr>
+		<th>Username</th>
+		<th>Average Duration</th>
+	</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="user in $ctrl.usersProductive">
+			<td><a href="#!/users/{{user.username}}">{{user.username}}</a></td>
+			<td>{{user.avg | toTimeString}}</td>
+		</tr>
+	</tbody>
+</table>
+
+
 
 </div>

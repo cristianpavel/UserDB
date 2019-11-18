@@ -7,8 +7,12 @@ client.indices.putMapping({
                 properties: {
                         username: {
                                 type : 'text',
-                                fielddata: 'true'
-                        },
+                        	fields: {
+					keyword : {
+						type: 'keyword'
+					}
+				}
+			},
 			start: {
 				type: 'date'
 			},

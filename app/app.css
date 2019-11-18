@@ -28,3 +28,112 @@ button {
 
 	cursor:pointer;
 }
+
+a {
+	cursor: pointer;
+}
+
+#wrapper { 
+  position: relative; 
+}
+
+#sessions_in_graph { 
+  position: relative; 
+  top: 10px; 
+  left: 10px; 
+  z-index: 99;
+   
+}
+
+#sessions_in_graph input {
+  background-color:rgba(0,0,0,0);
+  border:none;
+
+}
+
+#avg {
+	
+  font-family: "Times New Roman", Times, serif;
+
+}
+
+#search_bar{
+  float: right;
+  padding: 6px;
+  border: none;
+  margin-top: 8px;
+  margin-right: 16px;
+  font-size: 17px;
+}
+
+
+#error, #msg {
+	
+  position: absolute;
+  right: 40%;
+  top: 40%;
+  border-radius: 25px;
+  padding: 20px;
+  width: 200px;
+  height: 100px;
+  text-align: center; 
+
+}
+#error {
+	
+  border: 2px solid red;
+
+}
+#msg {
+	
+  border: 2px solid green;
+
+}
+
+.inactive {
+  color: red
+}
+
+.active {
+  color: green
+}
+.datepicker {
+
+	width: 20px;
+
+
+}
+
+
+#datepicker_wrapper {
+    position: absolute;
+    top: 300px;
+    width: 80%;
+    height: 200px;
+    margin: auto;
+    padding: 10px;
+}
+#from {
+    width: 15%;
+    height: 200px;
+    float: left;
+}
+
+#to {
+    margin-left: 15%;
+    height: 200px;
+}
+#google_timeline {
+  position: relative;
+  top: 100px;
+}
+
+
+.loading {
+
+  width: 200px;
+  height: 150px;
+  position: absolute;
+  left: 50%;
+
+}
